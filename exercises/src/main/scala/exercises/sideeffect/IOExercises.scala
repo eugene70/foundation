@@ -27,7 +27,7 @@ object IOExercises {
     // It also means `succeed` should NOT be used with a parameter that throws exceptions or perform side effects.
     def succeed[A](constant: A): IO[A] =
       new IO[A] {
-        def unsafeRun(): A = ???
+        def unsafeRun(): A = constant
       }
 
     // 1b. Implement `fail` a smart constructor that lifts a `Throwable` into an IO.
@@ -35,7 +35,7 @@ object IOExercises {
     // Try to test for `fail` in IOExercisesTest.scala.
     def fail[A](error: Throwable): IO[A] =
       new IO[A] {
-        def unsafeRun(): A = ???
+        def unsafeRun(): A = throw error
       }
 
     // 1c. What is the type of `boom`? Try to guess without using your IDE or REPL.
@@ -49,7 +49,7 @@ object IOExercises {
     // effect(http.delete("http://foo.com/order/1234"))
     def effect[A](block: => A): IO[A] =
       new IO[A] {
-        def unsafeRun(): A = ???
+        def unsafeRun(): A = block
       }
 
     def fromTry[A](fa: Try[A]): IO[A] =

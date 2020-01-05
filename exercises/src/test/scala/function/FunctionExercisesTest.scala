@@ -58,4 +58,13 @@ class FunctionExercisesTest extends AnyFunSuite with Matchers with ScalaCheckDri
     sumList(xs) shouldEqual xs.sum
   }
 
+  test("forAll2") {
+    forAll2(List(true, true , true)) shouldEqual true
+    forAll2(List(true, false, true)) shouldEqual false
+  }
+
+  test("headOption") {
+    headOption(List(1,2,3)) shouldEqual Some(1)
+    headOption(Nil) shouldEqual None
+  }
 }

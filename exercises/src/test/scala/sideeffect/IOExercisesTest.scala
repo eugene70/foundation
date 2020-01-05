@@ -23,11 +23,12 @@ class IOExercisesTest extends AnyFunSuite with Matchers with ScalaCheckDrivenPro
   }
 
   test("fail") {
-    // TODO
+    //fail IO.fail(new Exception)
   }
 
   test("effect") {
-    // TODO
+    IO.effect(4) shouldEqual IO.succeed(4)
+    IO.effect(throw new Exception(""))
   }
 
   /////////////////////

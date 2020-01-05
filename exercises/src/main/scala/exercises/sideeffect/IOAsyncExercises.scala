@@ -34,14 +34,30 @@ object IOAsyncExercises {
   }
 
   // 1a. Implement `deleteTwoOrders` such as it call `UserOrderApi#deleteOrder` concurrently
-  def deleteTwoOrders(api: UserOrderApi, ec: ExecutionContext)(orderId1: OrderId, orderId2: OrderId): IO[Unit] =
-    ???
+  def deleteTwoOrders(api: UserOrderApi, ec: ExecutionContext)(orderId1: OrderId, orderId2: OrderId): IO[Unit] = {
+    val deleteOrder1 = api.deleteOrder(orderId1).start(ec)
+    val deleteOrder2 = api.deleteOrder(orderId2).start(ec)
+    for {
+      _      <- deleteOrder1
+      awaitB <- deleteOrder2
+    } yield awaitB
+  }
 
   // 1b. Implement `deleteAllUserOrders` such as it fetches a user and delete all of its orders concurrently
   // e.g. if getUser returns User(UserId("1234"), "Rob", List(OrderId("1111"), OrderId("5555")))
   //      then we would call deleteOrder(OrderId("1111")) and deleteOrder(OrderId("5555")) concurrently
-  def deleteAllUserOrders(api: UserOrderApi)(userId: UserId): IO[Unit] =
-    ???
+  def deleteAllUserOrders(api: UserOrderApi)(userId: UserId): IO[Unit] = {
+    api.getUser(UserId("Rob")).flatMap( user =>
+      user.orderIds.foldLeft(IO()) { (acc, id) =>
+        acc.tuple(api.deleteOrder(id)).map(_ => ())
+//        IO.async {
+//          acc.unsafeRun()
+//          api.deleteOrder(id)
+//        }
+//        acc.flatMap(_ => api.deleteOrder(id))
+      }
+    )
+  }
 
   ////////////////////////
   // 2. Advanced API

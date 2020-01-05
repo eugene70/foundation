@@ -223,14 +223,14 @@ object FunctionExercises {
 
   // 3h. Implement `forAll2` using `foldRight` (same behaviour than `forAll`)
   def forAll2(xs: List[Boolean]): Boolean =
-    ???
+    foldRight(xs, true)(_ && _)
 
   // 3i. Implement `headOption` using `foldRight`.
   // `headOption` returns the first element of a List if it exists
   // such as headOption(List(1,2,3)) == Some(1)
   // but     headOption(Nil) == None
   def headOption[A](xs: List[A]): Option[A] =
-    ???
+    foldRight(xs, Option.empty[A])((a, _) => Option(a))
 
   // 3j. What fold (left or right) would you use to implement `min`? Why?
   def min(xs: List[Int]): Option[Int] = ???
@@ -316,7 +316,7 @@ object FunctionExercises {
   // val cachedInc = memoize((_: Int) + 1)
   // cachedInc(3) // 4 calculated
   // cachedInc(3) // from cache
-  // see https://medium.com/musings-on-functional-programming/scala-optimizing-expensive-functions-with-memoization-c05b781ae826
+    // see https://medium.com/musings-on-functional-programming/scala-optimizing-expensive-functions-with-memoization-c05b781ae826
   // or https://github.com/scalaz/scalaz/blob/series/7.3.x/tests/src/test/scala/scalaz/MemoTest.scala
   def memoize[A, B](f: A => B): A => B = ???
 
